@@ -27,3 +27,21 @@ go get -v golang.org/x/text
 自动获取网站编码
 
 go get -v golang.org/x/net/html
+
+### 正则表达式
+
+* css选择器
+
+$('#cityList'')
+
+$('.city-list')
+
+$('.city-list>dd>a')
+
+* 正则表达式
+
+### 解析器 Parser
+
+* 输入: utf-8编码的文本
+
+* 输出: Request{URL,对应Parser}列表，Item列表

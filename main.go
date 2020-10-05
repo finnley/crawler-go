@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 )
 
 func main() {
@@ -45,7 +46,9 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("%s\n", all)
+	//fmt.Printf("%s\n", all)
+	//提取城市和url
+	printCityList(all)
 }
 
 //自动获取网站编码，因为网站不一定时gbk
@@ -57,4 +60,32 @@ func determineEncoding(r io.Reader) encoding.Encoding {
 	}
 	e, _, _ := charset.DetermineEncoding(bytes, "")
 	return e
+}
+
+func printCityList(contents []byte)  {
+	//re := regexp.MustCompile(`<a href="http://www.zhenai.com/zhenghun/[0-9a-z]+"[^>]*>[^<]+</a>`)
+	////-1表示所有匹配
+	//matches := re.FindAll(contents, -1)
+	//fmt.Printf("%s\n", matches)
+	//for _, m := range matches {
+	//	fmt.Printf("%s\n", m)
+	//}
+	//fmt.Printf("Matches found: %d\n", len(matches))
+
+	//上面提取内容: <a href="http://www.zhenai.com/zhenghun/tongliang" data-v-2cb5b6a2>铜梁</a>
+	//现在只需要提取城市和url,改造如下
+
+	re := regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`)
+	matches := re.FindAllSubmatch(contents, -1)
+	for _, m := range matches {
+		//for _, subMatch := range m {
+		//	fmt.Printf("%s ", subMatch)
+		//}
+		//fmt.Println()
+
+		//上面输出格式: <a href="http://www.zhenai.com/zhenghun/yuxi" data-v-2cb5b6a2>玉溪</a> http://www.zhenai.com/zhenghun/yuxi 玉溪
+		//不需要全部打印，只需要城市和url
+
+		fmt.Printf("City: %s, URL: %s\n", m[2], m[1])
+	}
 }

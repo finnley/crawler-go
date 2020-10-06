@@ -14,6 +14,8 @@ func ParseCityList(contents []byte) engine.ParseResult {
 
 	//对于每一个url生成一个新的request
 	result := engine.ParseResult{}
+	//读取所有城市太多了，限制10个
+	limit := 10
 	for _, m := range matches {
 		//fmt.Printf("City: %s, URL: %s\n", m[2], m[1])
 		result.Items = append(result.Items, "City " + string(m[2]))
@@ -21,6 +23,10 @@ func ParseCityList(contents []byte) engine.ParseResult {
 			Url:        string(m[1]),
 			ParserFunc: ParseCity,
 		})
+		limit--
+		if limit == 0 {
+			break
+		}
 	}
 
 	return result

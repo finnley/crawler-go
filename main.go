@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"crawler-go/engine"
+	"crawler-go/zhenai/parser"
 	"fmt"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
@@ -13,6 +15,13 @@ import (
 )
 
 func main() {
+	engine.Run(engine.Request{
+		Url:        "http://www.zhenai.com/zhenghun",
+		ParserFunc: parser.ParseCityList,
+	})
+}
+
+func main2() {
 	//打开页面
 	resp, err := http.Get("http://www.zhenai.com/zhenghun")
 	if err != nil {
@@ -62,7 +71,7 @@ func determineEncoding(r io.Reader) encoding.Encoding {
 	return e
 }
 
-func printCityList(contents []byte)  {
+func printCityList(contents []byte) {
 	//re := regexp.MustCompile(`<a href="http://www.zhenai.com/zhenghun/[0-9a-z]+"[^>]*>[^<]+</a>`)
 	////-1表示所有匹配
 	//matches := re.FindAll(contents, -1)
